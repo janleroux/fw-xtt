@@ -37,7 +37,28 @@ Each channel has a JSON document:
 
 `null` means **no approved OTA firmware is published for that device on this channel**. All three manifests intentionally start with both devices set to `null`. The update client must treat missing, invalid, or unpublished entries as **no update**, never as permission to download an arbitrary asset.
 
-Before publishing a real entry, define and validate its exact version, target hardware, immutable GitHub Release asset URL, file size, SHA-256 hash, required update format, and cross-device compatibility. The final published-entry schema is to be finalized with the OTA code and its tests; do not publish partly populated entries.
+The Coach OTA1 implementation now recognises this exact published \`coach\` entry shape, while leaving \`sensor\` at \`null\` until Sensor OTA is implemented:
+
+\`\`\`json
+{
+  "schema_version": 1,
+  "channel": "dev",
+  "coach": {
+    "version": "0.1.1",
+    "hardware": "seeed-xiao-esp32-s3-plus",
+    "format": "esp32-app-bin",
+    "url": "https://github.com/janleroux/fw-xtt/releases/download/coach-0.1.1/xtt-coach-0.1.1.bin",
+    "size_bytes": 1234567,
+    "sha256": "REPLACE_WITH_REAL_64_CHARACTER_SHA256_CHECKSUM",
+    "source_commit": "REPLACE_WITH_ACTUAL_40_CHARACTER_SOURCE_SHA"
+  },
+  "sensor": null
+}
+\`\`\`
+
+**Example only; intentionally invalid:** the size, SHA-256 and source commit above are placeholders, not an approved package. Never copy it into a live channel manifest. Use a numeric, increasing \`major.minor.patch\` version; the first OTA1 Coach build identifies itself as \`0.1.0\`, so the first normal update offer must be a higher version. The URL must point to an immutable named \`.bin\` GitHub Release asset in this repository (no moving \`latest\` pointer). The firmware file must fit the actual Coach OTA slot. Only populate \`coach\` after a compiled binary, hash, target and wired recovery have been validated. Passing a SHA-256 hash does not by itself prove that the firmware is correctly built for this hardware.
+
+The Coach downloads the channel manifest over certificate-validated HTTPS on an explicit user request, rejects malformed/unpublished entries and wrong target or outdated version, then requires a separate user install gesture. After streaming the complete image to the inactive ESP32 OTA partition, it checks SHA-256 before selecting the new image and restarting. **This is implementation intent and source behaviour, not a claim of hardware acceptance.** There is no unattended checking or upgrading.
 
 ## Release and promotion rules
 
