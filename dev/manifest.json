@@ -2,13 +2,13 @@
   "schema_version": 1,
   "channel": "dev",
   "coach": {
-    "version": "0.1.8",
+    "version": "0.1.9",
     "hardware": "seeed-xiao-esp32-s3-plus",
     "format": "esp32-app-bin",
-    "url": "https://github.com/janleroux/fw-xtt/releases/download/coach-0.1.8/xtt-coach-0.1.8.bin",
+    "url": "https://github.com/janleroux/fw-xtt/releases/download/coach-0.1.9/xtt-coach-0.1.9.bin",
     "size_bytes": 1873008,
-    "sha256": "a73b15edb9ea455a9a5046de69c273bd293ce5c50518627001b298eab9d4f3b3",
-    "source_commit": "f97c09462ae27e9951ac367f23df52ad5c550c39"
+    "sha256": "c1fdde42df8ea8587f1d417ac675f581949a650c712c2c45838b614af681337e",
+    "source_commit": "300a91c18616370fd553465fc4877f5b8ebb61b3"
   },
   "sensor": null
 }
